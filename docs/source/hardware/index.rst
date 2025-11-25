@@ -2,66 +2,38 @@
 Hardware
 ========
 
-Complete hardware documentation for the AV2 autonomous vehicle platform.
-
-.. contents:: In This Section
-   :local:
-   :depth: 2
-
-Overview
-========
-
-The AV2 integrates multiple hardware systems to enable autonomous operation:
-
-.. figure:: ../_static/hardware_overview.png
-   :alt: Hardware System Overview
-   :align: center
-   :width: 80%
-
-   AV2 hardware architecture
-
-System Components
-=================
-
-Sensors
--------
-
-The perception system relies on multiple sensor modalities:
-
-- **Xsens MTi-630 AHRS/GPS** - Position, orientation, and velocity
-- **Velodyne VLP-16 LIDAR** - 3D point cloud for obstacle detection
-- **Intel RealSense D435** - RGB-D camera for visual perception
-- **USB Cameras** - Additional visual inputs
-
-Computing
----------
-
-- **Main Computer** - High-performance PC for perception and planning
-- **Teensy 4.1** - Real-time CAN bus interface to vehicle actuators
-
-Actuators
----------
-
-- **Steering System** - Electronic power steering control
-- **Throttle** - Electronic throttle control
-- **Brake** - Brake-by-wire system
-
-Power
------
-
-- **Main Battery** - Vehicle propulsion
-- **Auxiliary Battery** - Computing and sensor power
-- **Power Distribution** - Fused distribution to all components
-
-Hardware Documentation
-======================
+AV2 hardware documentation.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   system-overview
    sensors
    computing
    actuators
-   power-system
    wiring
+   power-system
+
+Components
+==========
+
+**Sensors**
+
+- Xsens MTi-630 (GPS/IMU)
+- Velodyne VLP-16 (LIDAR)
+- Intel RealSense D435 (RGB-D camera)
+
+**Computing**
+
+- Main computer (Ubuntu, perception/planning)
+- 4× Teensy 4.1 + Waveshare CAN (distributed actuator control)
+
+**Actuators**
+
+- Steering: Stepper motor with analog feedback
+- Throttle: MCP4728 DAC
+- Brake: Linear actuator with H-bridge
+
+**Power**
+
+- 12V auxiliary battery for computing/sensors
+- Power distribution board with fuses

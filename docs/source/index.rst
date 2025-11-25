@@ -69,12 +69,11 @@ Documentation Contents
    :caption: Hardware
 
    hardware/index
-   hardware/system-overview
    hardware/sensors
    hardware/computing
    hardware/actuators
-   hardware/power-system
    hardware/wiring
+   hardware/power-system
 
 .. toctree::
    :maxdepth: 2
