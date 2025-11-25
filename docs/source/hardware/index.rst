@@ -10,6 +10,7 @@ AV2 hardware documentation.
    sensors
    computing
    actuators
+   firmware
    wiring
    power-system
 

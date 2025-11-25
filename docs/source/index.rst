@@ -72,6 +72,7 @@ Documentation Contents
    hardware/sensors
    hardware/computing
    hardware/actuators
+   hardware/firmware
    hardware/wiring
    hardware/power-system
 
