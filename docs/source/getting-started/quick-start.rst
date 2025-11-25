@@ -2,7 +2,7 @@
 Quick Start
 ===========
 
-Get the UTM Navigator running in 5 minutes. This guide assumes all hardware is already set up and connected.
+Get the AV2 running in 5 minutes. This guide assumes all hardware is already set up and connected.
 
 .. contents:: Steps
    :local:

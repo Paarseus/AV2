@@ -2,7 +2,7 @@
 Getting Started
 ===============
 
-Welcome to the UTM Navigator! This section will guide you through setting up and running the autonomous vehicle platform for the first time.
+Welcome to the AV2! This section will guide you through setting up and running the autonomous vehicle platform for the first time.
 
 .. contents:: In This Section
    :local:
@@ -11,7 +11,7 @@ Welcome to the UTM Navigator! This section will guide you through setting up and
 Overview
 ========
 
-Before operating the UTM Navigator, you'll need to:
+Before operating the AV2, you'll need to:
 
 1. **Install the software** - Set up Python dependencies and sensor SDKs
 2. **Configure the hardware** - Connect and verify all sensors and actuators
@@ -23,7 +23,7 @@ Prerequisites
 
 **Hardware Requirements**
 
-- UTM Navigator vehicle platform (fully assembled)
+- AV2 vehicle platform (fully assembled)
 - Computing unit with Ubuntu 20.04/22.04 LTS
 - NVIDIA GPU (GTX 1060 or better) for perception
 - All sensors connected and powered

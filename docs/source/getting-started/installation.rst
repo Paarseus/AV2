@@ -2,7 +2,7 @@
 Installation
 ============
 
-Complete installation guide for the UTM Navigator software stack.
+Complete installation guide for the AV2 software stack.
 
 .. contents:: Contents
    :local:

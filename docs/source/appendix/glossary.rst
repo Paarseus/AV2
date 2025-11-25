@@ -2,7 +2,7 @@
 Glossary
 ========
 
-Technical terms used in the UTM Navigator documentation.
+Technical terms used in the AV2 documentation.
 
 .. glossary::
    :sorted:

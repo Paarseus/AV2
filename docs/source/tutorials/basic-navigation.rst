@@ -2,7 +2,7 @@
 Basic Navigation
 ================
 
-Your first autonomous navigation run with the UTM Navigator.
+Your first autonomous navigation run with the AV2.
 
 .. contents:: Steps
    :local:

@@ -2,7 +2,7 @@
 Mechanical
 ==========
 
-Physical specifications and mechanical design of the UTM Navigator.
+Physical specifications and mechanical design of the AV2.
 
 .. contents:: In This Section
    :local:
@@ -11,7 +11,7 @@ Physical specifications and mechanical design of the UTM Navigator.
 Overview
 ========
 
-This section documents the physical characteristics of the UTM Navigator platform, including vehicle dimensions, sensor mounting positions, and coordinate system definitions.
+This section documents the physical characteristics of the AV2 platform, including vehicle dimensions, sensor mounting positions, and coordinate system definitions.
 
 Understanding the mechanical configuration is essential for:
 

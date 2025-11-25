@@ -2,7 +2,7 @@
 Perception
 ==========
 
-Perception system for the UTM Navigator.
+Perception system for the AV2.
 
 .. contents:: Contents
    :local:

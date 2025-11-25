@@ -2,7 +2,7 @@
 System Overview
 ===============
 
-High-level overview of the UTM Navigator hardware architecture.
+High-level overview of the AV2 hardware architecture.
 
 .. contents:: Contents
    :local:
@@ -14,7 +14,7 @@ Architecture Diagram
 .. code-block:: text
 
    ┌─────────────────────────────────────────────────────────────────────────────┐
-   │                           UTM NAVIGATOR HARDWARE                            │
+   │                              AV2 HARDWARE                                   │
    ├─────────────────────────────────────────────────────────────────────────────┤
    │                                                                             │
    │  ┌─────────────────────────────────────────────────────────────────────┐   │

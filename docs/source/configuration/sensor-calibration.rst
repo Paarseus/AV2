@@ -2,7 +2,7 @@
 Sensor Calibration
 ==================
 
-Calibration procedures for UTM Navigator sensors.
+Calibration procedures for AV2 sensors.
 
 .. contents:: Contents
    :local:

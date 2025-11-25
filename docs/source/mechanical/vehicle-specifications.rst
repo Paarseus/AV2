@@ -2,7 +2,7 @@
 Vehicle Specifications
 ======================
 
-Physical specifications of the UTM Navigator platform.
+Physical specifications of the AV2 platform.
 
 .. contents:: Contents
    :local:
@@ -11,14 +11,14 @@ Physical specifications of the UTM Navigator platform.
 Vehicle Overview
 ================
 
-The UTM Navigator is built on a [vehicle platform base]. This section documents the key physical parameters used in the control algorithms.
+The AV2 is built on a [vehicle platform base]. This section documents the key physical parameters used in the control algorithms.
 
 .. figure:: ../_static/vehicle_dimensions.png
    :alt: Vehicle Dimensions
    :align: center
    :width: 80%
 
-   UTM Navigator dimensions diagram
+   AV2 dimensions diagram
 
 Physical Dimensions
 ===================

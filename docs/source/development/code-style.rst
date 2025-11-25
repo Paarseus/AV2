@@ -2,7 +2,7 @@
 Code Style
 ==========
 
-Coding standards for the UTM Navigator.
+Coding standards for the AV2.
 
 .. contents:: Contents
    :local:

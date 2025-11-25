@@ -2,7 +2,7 @@
 Tutorials
 =========
 
-Step-by-step tutorials for using the UTM Navigator.
+Step-by-step tutorials for using the AV2.
 
 .. contents:: Available Tutorials
    :local:
@@ -11,7 +11,7 @@ Step-by-step tutorials for using the UTM Navigator.
 Overview
 ========
 
-These tutorials guide you through common tasks with the UTM Navigator, from basic operation to advanced customization.
+These tutorials guide you through common tasks with the AV2, from basic operation to advanced customization.
 
 Getting Started
 ===============

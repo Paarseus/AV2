@@ -2,7 +2,7 @@
 First Run
 =========
 
-Guide to running the UTM Navigator for the first time after installation.
+Guide to running the AV2 for the first time after installation.
 
 .. contents:: Contents
    :local:

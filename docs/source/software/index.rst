@@ -2,7 +2,7 @@
 Software
 ========
 
-Software architecture and components of the UTM Navigator.
+Software architecture and components of the AV2.
 
 .. contents:: In This Section
    :local:
@@ -11,7 +11,7 @@ Software architecture and components of the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator software stack is a complete autonomous vehicle system implemented in Python. It provides:
+The AV2 software stack is a complete autonomous vehicle system implemented in Python. It provides:
 
 - **Perception**: LIDAR and camera-based obstacle detection
 - **Planning**: Route planning and local trajectory optimization
@@ -24,7 +24,7 @@ Architecture Summary
 .. code-block:: text
 
    ┌─────────────────────────────────────────────────────────────────────┐
-   │                      UTM NAVIGATOR SOFTWARE                         │
+   │                          AV2 SOFTWARE                               │
    ├─────────────────────────────────────────────────────────────────────┤
    │                                                                     │
    │  SENSORS              PERCEPTION           PLANNING        CONTROL  │

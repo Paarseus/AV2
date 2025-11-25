@@ -2,7 +2,7 @@
 Development
 ===========
 
-Developer guide for contributing to the UTM Navigator.
+Developer guide for contributing to the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Developer guide for contributing to the UTM Navigator.
 Overview
 ========
 
-This section provides guidelines for developers who want to contribute to or extend the UTM Navigator.
+This section provides guidelines for developers who want to contribute to or extend the AV2.
 
 Contents
 ========

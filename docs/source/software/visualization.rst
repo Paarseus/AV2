@@ -2,7 +2,7 @@
 Visualization
 =============
 
-Visualization tools for the UTM Navigator.
+Visualization tools for the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Visualization tools for the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator includes several visualization tools for debugging and monitoring:
+The AV2 includes several visualization tools for debugging and monitoring:
 
 - **GPS Visualizer**: Real-time position and route display
 - **Occupancy Grid Visualizer**: 2D obstacle map

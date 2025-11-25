@@ -2,7 +2,7 @@
 Wiring
 ======
 
-Wiring diagrams and connector pinouts for the UTM Navigator.
+Wiring diagrams and connector pinouts for the AV2 platform.
 
 .. contents:: Contents
    :local:
@@ -14,7 +14,7 @@ System Wiring Overview
 .. code-block:: text
 
    ┌────────────────────────────────────────────────────────────────────────────┐
-   │                         WIRING OVERVIEW                                    │
+   │                         AV2 WIRING OVERVIEW                                │
    ├────────────────────────────────────────────────────────────────────────────┤
    │                                                                            │
    │    ┌─────────────┐                                                         │
@@ -37,30 +37,40 @@ System Wiring Overview
    │    └─────────────┘                     │            │  └───────────┘  │  │
    │                                        │            │                 │  │
    │    ┌─────────────┐                     │            └────────┬────────┘  │
-   │    │   TEENSY    │◄─── USB Serial ─────┼─────────────────────┘           │
-   │    │    4.1      │                     │                                  │
-   │    │             │◄─── 5V Power ───────┤                                  │
+   │    │ CAN MASTER  │◄─── USB Serial ─────┼─────────────────────┘           │
+   │    │ (Teensy4.1) │                     │                                  │
    │    └──────┬──────┘                     │                                  │
-   │           │ CAN                        │                                  │
-   │           ▼                            │                                  │
-   │    ┌─────────────┐                     │     ┌────────────────────────┐  │
-   │    │     CAN     │                     │     │   POWER DISTRIBUTION   │  │
-   │    │ TRANSCEIVER │                     │     │         BOARD          │  │
-   │    └──────┬──────┘                     │     │                        │  │
-   │           │                            └────►│  12V ──► Sensors       │  │
-   │           ▼ CAN Bus                          │   5V ──► USB/Teensy    │  │
-   │    ═══════════════                           │  19V ──► Computer      │  │
-   │    ║  VEHICLE   ║                            │                        │  │
-   │    ║ ACTUATORS  ║                            │         ▲              │  │
-   │    ═══════════════                           │         │              │  │
-   │                                              │    ┌────┴────┐         │  │
-   │                                              │    │ AUX     │         │  │
-   │                                              │    │ BATTERY │         │  │
-   │                                              │    │  12V    │         │  │
-   │                                              │    └─────────┘         │  │
-   │                                              └────────────────────────┘  │
+   │           │ CAN Bus (250 kbps)         │                                  │
+   │    ═══════╪═══════════════════════════════════════════                   │
+   │           │              │              │              │                  │
+   │    ┌──────┴──────┐ ┌─────┴─────┐ ┌─────┴─────┐ ┌─────┴─────┐            │
+   │    │  STEERING   │ │ THROTTLE  │ │   BRAKE   │ │   SPARE   │            │
+   │    │   NODE      │ │   NODE    │ │   NODE    │ │   NODE    │            │
+   │    │ (Teensy4.1) │ │(Teensy4.1)│ │(Teensy4.1)│ │ (future)  │            │
+   │    └──────┬──────┘ └─────┬─────┘ └─────┬─────┘ └───────────┘            │
+   │           │              │              │                                 │
+   │           ▼              ▼              ▼                                 │
+   │       Stepper        MCP4728       Linear                                │
+   │       Motor +         DAC         Actuator                               │
+   │       Feedback                                                            │
    │                                                                            │
-   └────────────────────────────────────────────────────────────────────────────┘
+   │                                              ┌────────────────────────┐  │
+   │                                              │   POWER DISTRIBUTION   │  │
+   │                                         ┌───►│         BOARD          │  │
+   │                                         │    │                        │  │
+   │                                         │    │  12V ──► Sensors       │  │
+   │                                         │    │   5V ──► USB/Teensy    │  │
+   │                                         │    │  19V ──► Computer      │  │
+   │                                         │    │                        │  │
+   │                                         │    │         ▲              │  │
+   │                                         │    │    ┌────┴────┐         │  │
+   │                                         │    │    │ AUX     │         │  │
+   │                                         │    │    │ BATTERY │         │  │
+   │                                         │    │    │  12V    │         │  │
+   │                                         │    │    └─────────┘         │  │
+   │                                         │    └────────────────────────┘  │
+   │                                         │                                 │
+   └─────────────────────────────────────────┴─────────────────────────────────┘
 
 Xsens MTi-630 Wiring
 ====================
@@ -136,58 +146,144 @@ Intel RealSense Wiring
 
    Use a high-quality USB 3.0 cable. Poor cables cause bandwidth issues and dropped frames.
 
-Teensy 4.1 Wiring
-=================
+Distributed CAN Bus Wiring
+==========================
 
-USB Connection
---------------
+The AV2 uses a distributed CAN bus architecture with multiple Teensy 4.1 nodes, each paired with a Waveshare CAN transceiver.
 
-.. code-block:: text
-
-   Teensy Micro-USB ◄──── USB Cable ────► Computer USB Port
-
-CAN Bus Interface
------------------
-
-Using MCP2562 transceiver:
+CAN Bus Topology
+----------------
 
 .. code-block:: text
 
-   Teensy 4.1                  MCP2562                Vehicle CAN
-   ──────────                  ───────                ───────────
-   Pin 22 (CTX1) ──────────► TXD (1)
-   Pin 23 (CRX1) ◄────────── RXD (4)
-                              CANH (7) ────────────► CAN_H
-                              CANL (6) ────────────► CAN_L
-   3.3V ──────────────────► VDD (3)
-   GND ───────────────────► VSS (2), STBY (8)
+   120Ω                                                                  120Ω
+    ║                                                                      ║
+   ─┼──────────────────────────────────────────────────────────────────────┼─ CAN_H
+    │         │              │              │              │               │
+    │    ┌────┴────┐    ┌────┴────┐    ┌────┴────┐    ┌────┴────┐         │
+    │    │Waveshare│    │Waveshare│    │Waveshare│    │Waveshare│         │
+    │    │  CAN    │    │  CAN    │    │  CAN    │    │  CAN    │         │
+    │    │(Master) │    │(Steer)  │    │(Throttle│    │(Brake)  │         │
+    │    └────┬────┘    └────┬────┘    └────┬────┘    └────┬────┘         │
+    │         │              │              │              │               │
+   ─┼─────────┴──────────────┴──────────────┴──────────────┴───────────────┼─ CAN_L
+    ║                                                                      ║
+   GND                                                                    GND
 
-**Termination**: 120Ω resistor between CAN_H and CAN_L at each end of the bus.
+**Bus Configuration**:
 
-CAN Bus Wiring
-==============
++-------------------+------------------+
+| Parameter         | Value            |
++===================+==================+
+| Bit Rate          | 250 kbps         |
++-------------------+------------------+
+| Termination       | 120Ω at each end |
++-------------------+------------------+
+| Cable Type        | Twisted pair     |
++-------------------+------------------+
+| Max Length        | 40 meters        |
++-------------------+------------------+
 
-Topology
---------
+Teensy 4.1 to Waveshare CAN Wiring
+----------------------------------
+
+Each Teensy 4.1 connects to a Waveshare CAN transceiver module:
 
 .. code-block:: text
 
-   ┌─────────┐      ┌─────────┐      ┌─────────┐      ┌─────────┐
-   │ Teensy  │      │Steering │      │Throttle │      │ Brake   │
-   │  CAN    │══════│   ECU   │══════│   ECU   │══════│   ECU   │
-   └────┬────┘      └────┬────┘      └────┬────┘      └────┬────┘
-        │                │                │                │
-       120Ω             ─┴─              ─┴─              120Ω
-        │                                                  │
-       GND                                                GND
+   Teensy 4.1                  Waveshare CAN              CAN Bus
+   ──────────                  ─────────────              ───────
+   Pin 22 (CTX1) ──────────► CTX
+   Pin 23 (CRX1) ◄────────── CRX
+                              CAN_H ──────────────────► CAN_H
+                              CAN_L ──────────────────► CAN_L
+   5V ──────────────────────► VCC
+   GND ─────────────────────► GND
 
-Cable Specifications
+CAN Master Node Wiring
+----------------------
+
+The CAN Master node connects to the main computer via USB serial:
+
+.. code-block:: text
+
+   MAIN COMPUTER                 CAN MASTER NODE
+   ─────────────                 ───────────────
+   USB Port ◄──── USB Cable ───► Teensy 4.1 Micro-USB
+
+                                 Teensy 4.1 Pin 22 ──► Waveshare CTX
+                                 Teensy 4.1 Pin 23 ◄── Waveshare CRX
+                                                       │
+                                                       └──► CAN Bus
+
+Steering Node Wiring
 --------------------
 
-- **Type**: Twisted pair, shielded
-- **Gauge**: 22-24 AWG
-- **Max Length**: 40 meters (500 kbps)
-- **Termination**: 120Ω at each end
+.. code-block:: text
+
+   STEERING NODE (Teensy 4.1)
+   ──────────────────────────
+   Pin 4  (DIR)  ────────────► Stepper Driver DIR
+   Pin 5  (STEP) ────────────► Stepper Driver STEP
+
+   Pin 20 ◄───────────────────  Right Limit Switch (INPUT_PULLDOWN)
+   Pin 21 ◄───────────────────  Left Limit Switch (INPUT_PULLDOWN)
+
+   Pin A0 ◄───────────────────  Analog Position Feedback (Potentiometer)
+
+   Pin 22 (CTX1) ────────────► Waveshare CAN CTX
+   Pin 23 (CRX1) ◄──────────── Waveshare CAN CRX
+
+   5V  ──────────────────────► Waveshare VCC
+   GND ──────────────────────► Waveshare GND, Limit Switch Common
+
+Throttle Node Wiring
+--------------------
+
+.. code-block:: text
+
+   THROTTLE NODE (Teensy 4.1)
+   ──────────────────────────
+   Pin 18 (SDA) ─────────────► MCP4728 SDA
+   Pin 19 (SCL) ─────────────► MCP4728 SCL
+   3.3V ─────────────────────► MCP4728 VCC
+   GND ──────────────────────► MCP4728 GND
+
+   Pin 22 (CTX1) ────────────► Waveshare CAN CTX
+   Pin 23 (CRX1) ◄──────────── Waveshare CAN CRX
+
+   5V  ──────────────────────► Waveshare VCC
+   GND ──────────────────────► Waveshare GND
+
+   MCP4728 DAC Outputs:
+   ────────────────────
+   Channel A (VOUT_A) ───────► Vehicle Throttle Input
+   Channel B (VOUT_B) ───────► Drive Mode Line 1
+   Channel C (VOUT_C) ───────► Drive Mode Line 2
+   Channel D (VOUT_D) ───────► Drive Mode Line 3
+
+Brake Node Wiring
+-----------------
+
+.. code-block:: text
+
+   BRAKE NODE (Teensy 4.1)
+   ───────────────────────
+   Pin 12 (RPWM) ────────────► H-Bridge RPWM (Extend)
+   Pin 11 (LPWM) ────────────► H-Bridge LPWM (Retract)
+
+   Pin A0 ◄───────────────────  Analog Position Feedback (Potentiometer)
+
+   Pin 22 (CTX1) ────────────► Waveshare CAN CTX
+   Pin 23 (CRX1) ◄──────────── Waveshare CAN CRX
+
+   5V  ──────────────────────► Waveshare VCC
+   GND ──────────────────────► Waveshare GND
+
+   H-Bridge Power:
+   ───────────────
+   +12V ─────────────────────► H-Bridge VCC
+   GND ──────────────────────► H-Bridge GND
 
 Power Distribution Wiring
 =========================
@@ -207,14 +303,15 @@ From Auxiliary Battery
    │                    POWER DISTRIBUTION BOARD                  │
    │                                                              │
    │   ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐     │
-   │   │ 15A │  │ 5A  │  │ 2A  │  │ 2A  │  │ 2A  │  │ 2A  │     │
+   │   │ 15A │  │ 2A  │  │ 2A  │  │ 2A  │  │ 2A  │  │ 2A  │     │
    │   └──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘     │
    │      │        │        │        │        │        │         │
    └──────┼────────┼────────┼────────┼────────┼────────┼─────────┘
           │        │        │        │        │        │
           ▼        ▼        ▼        ▼        ▼        ▼
-       Computer  12V→5V   LIDAR    Fans    LEDs    Spare
-                  Reg
+       Computer  LIDAR    Teensy   Teensy   Teensy   Teensy
+                          Master   Steer   Throttle  Brake
+                         (+CAN)   (+CAN)   (+CAN)   (+CAN)
 
 Connector Reference
 ===================
@@ -231,9 +328,9 @@ Standard Connectors Used
 +----------------------+------------------+------------------+
 | RealSense            | USB-C            | USB 3.0 required |
 +----------------------+------------------+------------------+
-| Teensy               | Micro-USB        |                  |
+| Teensy (×4)          | Micro-USB        | Power via USB    |
 +----------------------+------------------+------------------+
-| CAN Bus              | Deutsch DT04     | Or bare wire     |
+| CAN Bus              | Screw terminals  | Or Deutsch DT04  |
 +----------------------+------------------+------------------+
 | Power                | Anderson PP      | Or ring terminals|
 +----------------------+------------------+------------------+
@@ -261,6 +358,18 @@ Wire Color Code
 
 Best Practices
 ==============
+
+CAN Bus Wiring
+--------------
+
+1. **Twisted Pair**: Use twisted pair cable for CAN_H and CAN_L
+2. **Termination**: Install 120Ω resistors at both ends of the bus
+3. **Daisy Chain**: Connect nodes in a linear bus topology, not star
+4. **Keep Short**: Minimize stub lengths from main bus to nodes
+5. **Shield**: Use shielded cable in electrically noisy environments
+
+General Wiring
+--------------
 
 1. **Strain Relief**: Secure all cables to prevent movement
 2. **Shielding**: Ground shields at one end only

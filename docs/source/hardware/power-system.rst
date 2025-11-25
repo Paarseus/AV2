@@ -2,7 +2,7 @@
 Power System
 ============
 
-Power distribution and management for the UTM Navigator.
+Power distribution and management for the AV2 platform.
 
 .. contents:: Contents
    :local:
@@ -11,10 +11,10 @@ Power distribution and management for the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator uses a dual-battery system:
+The AV2 uses a dual-battery system:
 
 1. **Main Battery**: Powers vehicle propulsion
-2. **Auxiliary Battery**: Powers computing and sensors
+2. **Auxiliary Battery**: Powers computing, sensors, and CAN control nodes
 
 This separation ensures sensor/compute systems remain operational even under heavy propulsion loads.
 
@@ -44,8 +44,9 @@ Power Architecture
    │  │   Drive     │                    ▼           ▼           ▼   │
    │  │   Motor     │              ┌─────────┐ ┌─────────┐ ┌───────┐ │
    │  └─────────────┘              │Computer │ │ Sensors │ │Teensy │ │
-   │                               │ (12/19V)│ │  (12V)  │ │ (5V)  │ │
-   │                               └─────────┘ └─────────┘ └───────┘ │
+   │                               │ (12/19V)│ │  (12V)  │ │Nodes  │ │
+   │                               └─────────┘ └─────────┘ │ (5V)  │ │
+   │                                                       └───────┘ │
    │                                                                 │
    └─────────────────────────────────────────────────────────────────┘
 
@@ -100,8 +101,9 @@ Purpose
 -------
 
 - Main computer
-- All sensors
-- Teensy CAN master
+- All sensors (LIDAR, GPS/IMU, cameras)
+- Teensy 4.1 CAN nodes (Master + 3 actuator nodes)
+- Waveshare CAN transceivers
 - Status lights and indicators
 
 Power Distribution Board
@@ -128,7 +130,13 @@ Fuse Ratings
 +-------------------+----------+----------+
 | RealSense Camera  | 5V (USB) | 1A       |
 +-------------------+----------+----------+
-| Teensy + CAN      | 5V       | 1A       |
+| CAN Master Node   | 5V (USB) | 0.5A     |
++-------------------+----------+----------+
+| Steering Node     | 5V (USB) | 0.5A     |
++-------------------+----------+----------+
+| Throttle Node     | 5V (USB) | 0.5A     |
++-------------------+----------+----------+
+| Brake Node        | 5V (USB) | 0.5A     |
 +-------------------+----------+----------+
 | USB Hub           | 5V       | 2A       |
 +-------------------+----------+----------+
@@ -154,12 +162,33 @@ Typical System
 +-----------------------+----------+----------+----------+
 | RealSense D435        | 5V       | 0.7 A    | 1 A      |
 +-----------------------+----------+----------+----------+
-| Teensy 4.1            | 5V       | 0.1 A    | 0.2 A    |
+| Teensy 4.1 (×4)       | 5V       | 0.4 A    | 0.8 A    |
++-----------------------+----------+----------+----------+
+| Waveshare CAN (×4)    | 5V       | 0.2 A    | 0.4 A    |
++-----------------------+----------+----------+----------+
+| MCP4728 DAC           | 3.3V     | 0.01 A   | 0.02 A   |
 +-----------------------+----------+----------+----------+
 | Cooling Fans          | 12V      | 0.5 A    | 1 A      |
 +-----------------------+----------+----------+----------+
 | **Total (12V equiv)** |          | ~10 A    | ~18 A    |
 +-----------------------+----------+----------+----------+
+
+CAN Node Power Details
+----------------------
+
+Each Teensy 4.1 + Waveshare CAN module is powered via USB:
+
++------------------+---------------+---------------+
+| Component        | Voltage       | Current       |
++==================+===============+===============+
+| Teensy 4.1       | 5V (USB)      | 100 mA        |
++------------------+---------------+---------------+
+| Waveshare CAN    | 5V            | 50 mA         |
++------------------+---------------+---------------+
+| **Per Node**     | 5V            | 150 mA        |
++------------------+---------------+---------------+
+| **4 Nodes Total**| 5V            | 600 mA        |
++------------------+---------------+---------------+
 
 Runtime Estimation
 ------------------
@@ -190,6 +219,21 @@ The power distribution board monitors battery voltage:
 
 - **Warning**: < 11.5V → Reduce load
 - **Cutoff**: < 10.5V → Shutdown non-essential systems
+
+CAN Node Watchdogs
+------------------
+
+Each CAN actuator node has independent watchdog timers that trigger safe fallback states if communication is lost:
+
++-------------+---------+---------------------------+
+| Node        | Timeout | Fallback Action           |
++=============+=========+===========================+
+| Throttle    | 200ms   | Neutral mode, idle output |
++-------------+---------+---------------------------+
+| Steering    | None    | Hold last position        |
++-------------+---------+---------------------------+
+| Brake       | 100ms   | Apply full brake          |
++-------------+---------+---------------------------+
 
 Charging
 ========

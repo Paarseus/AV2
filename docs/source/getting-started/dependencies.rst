@@ -2,7 +2,7 @@
 Dependencies
 ============
 
-Complete reference of all software dependencies for the UTM Navigator.
+Complete reference of all software dependencies for the AV2.
 
 .. contents:: Contents
    :local:
@@ -157,7 +157,7 @@ requirements.txt
 
 .. code-block:: text
 
-   # UTM Navigator Dependencies
+   # AV2 Dependencies
    # Install with: pip install -r requirements.txt
 
    # Core scientific

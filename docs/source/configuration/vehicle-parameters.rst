@@ -2,7 +2,7 @@
 Vehicle Parameters
 ==================
 
-Vehicle-specific parameters for the UTM Navigator.
+Vehicle-specific parameters for the AV2.
 
 .. contents:: Contents
    :local:

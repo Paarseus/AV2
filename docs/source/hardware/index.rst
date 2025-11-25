@@ -2,7 +2,7 @@
 Hardware
 ========
 
-Complete hardware documentation for the UTM Navigator autonomous vehicle platform.
+Complete hardware documentation for the AV2 autonomous vehicle platform.
 
 .. contents:: In This Section
    :local:
@@ -11,14 +11,14 @@ Complete hardware documentation for the UTM Navigator autonomous vehicle platfor
 Overview
 ========
 
-The UTM Navigator integrates multiple hardware systems to enable autonomous operation:
+The AV2 integrates multiple hardware systems to enable autonomous operation:
 
 .. figure:: ../_static/hardware_overview.png
    :alt: Hardware System Overview
    :align: center
    :width: 80%
 
-   UTM Navigator hardware architecture
+   AV2 hardware architecture
 
 System Components
 =================

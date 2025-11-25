@@ -2,7 +2,7 @@
 Sensors
 =======
 
-Detailed specifications and setup for all sensors on the UTM Navigator.
+Detailed specifications and setup for all sensors on the AV2.
 
 .. contents:: Contents
    :local:

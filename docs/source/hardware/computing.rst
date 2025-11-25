@@ -2,7 +2,7 @@
 Computing
 =========
 
-Computing hardware for the UTM Navigator.
+Computing hardware for the AV2 platform.
 
 .. contents:: Contents
    :local:
@@ -35,41 +35,6 @@ Recommended Specifications
 | Ethernet         | 1× Gigabit                 | 2× Gigabit                     |
 +------------------+----------------------------+--------------------------------+
 
-Form Factor Options
--------------------
-
-**Desktop/Tower**
-
-- Pros: Best performance, easy cooling, expandable
-- Cons: Large, requires secure mounting
-
-**Mini PC (NUC-style)**
-
-- Pros: Compact, low power
-- Cons: Limited GPU options, thermal constraints
-
-**Industrial PC**
-
-- Pros: Ruggedized, wide temperature range, vibration resistant
-- Cons: Higher cost
-
-**Laptop**
-
-- Pros: Integrated display, battery backup
-- Cons: Difficult to mount, limited ports
-
-Current Setup
--------------
-
-The UTM Navigator currently uses:
-
-- **Platform**: Custom desktop build
-- **CPU**: Intel Core i7-10700K
-- **RAM**: 32 GB DDR4-3200
-- **GPU**: NVIDIA GeForce RTX 2060
-- **Storage**: 512 GB NVMe SSD
-- **OS**: Ubuntu 22.04 LTS
-
 Software Requirements
 ---------------------
 
@@ -87,23 +52,60 @@ Software Requirements
    # Python
    Python 3.8+
 
-Teensy 4.1 CAN Master
-=====================
+Distributed CAN Control System
+==============================
 
 Overview
 --------
 
-The Teensy 4.1 serves as a real-time bridge between the main computer and the vehicle's CAN bus.
+AV2 uses a distributed embedded control architecture with multiple Teensy 4.1 microcontrollers communicating over a 250 kbps CAN bus. This modular design enables:
 
-.. figure:: ../_static/teensy41.png
-   :alt: Teensy 4.1
-   :align: center
-   :width: 300px
+- Independent development and testing of each subsystem
+- Fault isolation between actuators
+- Real-time deterministic control loops
+- Easy hardware debugging and replacement
 
-   Teensy 4.1 Microcontroller
+.. code-block:: text
 
-Specifications
---------------
+   ┌─────────────────────────────────────────────────────────────────────────┐
+   │                    DISTRIBUTED CAN ARCHITECTURE                         │
+   ├─────────────────────────────────────────────────────────────────────────┤
+   │                                                                         │
+   │    ┌──────────────────┐                                                │
+   │    │   MAIN COMPUTER  │                                                │
+   │    │   (Ubuntu/ROS)   │                                                │
+   │    └────────┬─────────┘                                                │
+   │             │ USB Serial (115200 baud)                                 │
+   │             ▼                                                          │
+   │    ┌──────────────────┐                                                │
+   │    │  TEENSY 4.1      │                                                │
+   │    │  CAN MASTER      │                                                │
+   │    │  + Waveshare CAN │                                                │
+   │    └────────┬─────────┘                                                │
+   │             │ CAN Bus (250 kbps)                                       │
+   │    ═════════╪═════════════════════════════════════════                 │
+   │             │                                                          │
+   │    ┌────────┴────────┬─────────────────┬─────────────────┐            │
+   │    │                 │                 │                 │            │
+   │    ▼                 ▼                 ▼                 │            │
+   │ ┌──────────┐   ┌──────────┐   ┌──────────┐              │            │
+   │ │ STEERING │   │ THROTTLE │   │  BRAKE   │              │            │
+   │ │  NODE    │   │   NODE   │   │   NODE   │              │            │
+   │ │Teensy4.1 │   │Teensy4.1 │   │Teensy4.1 │              │            │
+   │ │+Waveshare│   │+Waveshare│   │+Waveshare│              │            │
+   │ └────┬─────┘   └────┬─────┘   └────┬─────┘              │            │
+   │      │              │              │                     │            │
+   │      ▼              ▼              ▼                     │            │
+   │  Stepper        MCP4728       Linear                    │            │
+   │  Motor          DAC           Actuator                  │            │
+   │                                                          │            │
+   └─────────────────────────────────────────────────────────────────────────┘
+
+Hardware Components
+-------------------
+
+Teensy 4.1 Microcontroller
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 +-------------------------+--------------------------------+
 | Parameter               | Value                          |
@@ -114,27 +116,127 @@ Specifications
 +-------------------------+--------------------------------+
 | Flash                   | 8 MB (+ microSD slot)          |
 +-------------------------+--------------------------------+
-| CAN Bus                 | 3× CAN 2.0B                    |
+| CAN Controllers         | 3× FlexCAN (CAN 2.0B)          |
 +-------------------------+--------------------------------+
 | USB                     | USB 2.0 (480 Mbps)             |
 +-------------------------+--------------------------------+
 | GPIO                    | 55 digital pins                |
 +-------------------------+--------------------------------+
+| ADC                     | 2× 12-bit ADC                  |
++-------------------------+--------------------------------+
 | Dimensions              | 61 × 18 mm                     |
 +-------------------------+--------------------------------+
 
-Purpose
--------
+Waveshare CAN Transceiver
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. **Protocol Translation**: Convert USB serial commands to CAN messages
-2. **Real-time Control**: Ensure consistent timing for actuator commands
-3. **Safety Watchdog**: Emergency stop if communication lost
-4. **Sensor Aggregation**: Optional low-level sensor interfaces
+Each Teensy 4.1 is paired with a Waveshare CAN transceiver module:
 
-Communication Protocol
++-------------------------+--------------------------------+
+| Parameter               | Value                          |
++=========================+================================+
+| Transceiver Chip        | SN65HVD230 or MCP2551          |
++-------------------------+--------------------------------+
+| Bus Voltage             | 5V tolerant                    |
++-------------------------+--------------------------------+
+| Data Rate               | Up to 1 Mbps                   |
++-------------------------+--------------------------------+
+| ESD Protection          | ±15 kV HBM                     |
++-------------------------+--------------------------------+
+
+CAN Bus Configuration
+---------------------
+
+**Bit Rate**: 250 kbps
+
+**Termination**: 120Ω resistors at each end of the bus
+
+**Wiring**:
+
+.. code-block:: text
+
+   Teensy 4.1 Pin 22 (CTX1) ──► Waveshare CAN TX
+   Teensy 4.1 Pin 23 (CRX1) ◄── Waveshare CAN RX
+   Waveshare CAN_H ────────────► CAN Bus High
+   Waveshare CAN_L ────────────► CAN Bus Low
+
+CAN Message Protocol
+====================
+
+Message IDs
+-----------
+
++------------------+------------+-------------------+
+| Subsystem        | Command ID | Status ID         |
++==================+============+===================+
+| Throttle         | 0x100      | 0x101             |
++------------------+------------+-------------------+
+| Steering         | 0x200      | 0x201             |
++------------------+------------+-------------------+
+| Brake            | 0x300      | 0x301             |
++------------------+------------+-------------------+
+
+Throttle Messages (0x100)
+-------------------------
+
+**Command Frame** (ID: 0x100, 3 bytes):
+
++--------+----------------+---------------------------+
+| Byte   | Value          | Description               |
++========+================+===========================+
+| 0      | 0 or 1         | E-STOP flag               |
++--------+----------------+---------------------------+
+| 1      | 0-255          | Throttle (0-100%)         |
++--------+----------------+---------------------------+
+| 2      | 'N','D','S','R'| Drive mode                |
++--------+----------------+---------------------------+
+
+**Drive Modes**:
+
+- ``N`` - Neutral
+- ``D`` - Drive
+- ``S`` - Sport
+- ``R`` - Reverse
+
+Steering Messages (0x200)
+-------------------------
+
+**Command Frame** (ID: 0x200, 2 bytes):
+
++--------+----------------+---------------------------+
+| Byte   | Value          | Description               |
++========+================+===========================+
+| 0      | 0 or 1         | Center flag (recenter)    |
++--------+----------------+---------------------------+
+| 1      | -127 to +127   | Steering (-1.0 to +1.0)   |
++--------+----------------+---------------------------+
+
+**Steering Convention**:
+
+- Negative values = Left
+- Positive values = Right
+- 0 = Center
+
+Brake Messages (0x300)
 ----------------------
 
-The Teensy communicates with the main computer via USB serial:
+**Command Frame** (ID: 0x300, 2 bytes):
+
++--------+----------------+---------------------------+
+| Byte   | Value          | Description               |
++========+================+===========================+
+| 0      | 0 or 1         | E-STOP flag               |
++--------+----------------+---------------------------+
+| 1      | 0-255          | Brake pressure (0-100%)   |
++--------+----------------+---------------------------+
+
+Master Node (CAN Master)
+========================
+
+The Master node receives commands from the main computer via USB serial and broadcasts them to the actuator nodes over CAN.
+
+Serial Protocol
+---------------
 
 **Baud Rate**: 115200
 
@@ -145,15 +247,15 @@ The Teensy communicates with the main computer via USB serial:
 +----------+------------------+---------------------------+
 | Command  | Format           | Description               |
 +==========+==================+===========================+
-| Throttle | ``T <value>\n``  | value: 0.0 to 1.0         |
+| Throttle | ``T <value>``    | value: 0.0 to 1.0         |
 +----------+------------------+---------------------------+
-| Brake    | ``B <value>\n``  | value: 0.0 to 1.0         |
+| Brake    | ``B <value>``    | value: 0.0 to 1.0         |
 +----------+------------------+---------------------------+
-| Steering | ``S <value>\n``  | value: -1.0 to 1.0        |
+| Steering | ``S <value>``    | value: -1.0 to 1.0        |
 +----------+------------------+---------------------------+
-| Mode     | ``M <mode>\n``   | mode: N, D, S, R          |
+| Mode     | ``M <mode>``     | mode: N, D, S, R          |
 +----------+------------------+---------------------------+
-| E-Stop   | ``E <0/1>\n``    | 0: release, 1: engage     |
+| E-Stop   | ``E <0/1>``      | 0: release, 1: engage     |
 +----------+------------------+---------------------------+
 
 **Examples**:
@@ -161,7 +263,7 @@ The Teensy communicates with the main computer via USB serial:
 .. code-block:: text
 
    T 0.5       # Set throttle to 50%
-   S -0.25     # Steer 25% right
+   S -0.25     # Steer 25% left
    B 1.0       # Full brake
    M D         # Drive mode
    E 1         # Emergency stop
@@ -169,51 +271,82 @@ The Teensy communicates with the main computer via USB serial:
 Firmware
 --------
 
-The Teensy runs custom firmware for:
+The Master node firmware is implemented using the FlexCAN_T4 library:
 
-- USB serial parsing
-- CAN message construction
-- Watchdog timer (100ms timeout)
-- Status reporting
+.. code-block:: cpp
 
-Firmware source and flashing instructions: ``firmware/teensy_can_master/``
+   #include <FlexCAN_T4.h>
 
-CAN Bus Interface
------------------
+   #define CAN_BITRATE     250000
+   #define THROTTLE_ID     0x100
+   #define STEER_ID        0x200
+   #define BRAKE_ID        0x300
 
-**Transceiver**: MCP2562 or SN65HVD230
+   FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1;
 
-**Bit Rate**: 500 kbps (standard automotive)
-
-**Wiring**:
-
-.. code-block:: text
-
-   Teensy Pin 22 (CTX1) → CAN Transceiver TX
-   Teensy Pin 23 (CRX1) → CAN Transceiver RX
-   CAN_H, CAN_L → Vehicle CAN Bus
-   120Ω termination resistor
+   void setup() {
+       Serial.begin(115200);
+       Can1.begin();
+       Can1.setBaudRate(CAN_BITRATE);
+   }
 
 Safety Features
+===============
+
+Watchdog Timers
 ---------------
 
-1. **Watchdog Timer**: If no command received for 100ms, apply brakes
-2. **Command Validation**: Reject out-of-range values
-3. **Emergency Stop**: Hardware interrupt for immediate stop
-4. **Status Heartbeat**: 10 Hz status messages to main computer
+Each actuator node implements a watchdog timer:
+
+- **Throttle**: 200ms timeout → Falls back to Neutral + Idle
+- **Steering**: No timeout (holds last position)
+- **Brake**: 100ms timeout → Applies full brake
+
+Emergency Stop
+--------------
+
+When E-STOP is activated:
+
+1. Brake node applies full braking force
+2. Throttle node sets output to 0V and enters Neutral
+3. Steering node centers (optional)
+
+All CAN command frames include an E-STOP byte for fail-safe operation.
+
+Development Environment
+=======================
+
+PlatformIO Setup
+----------------
+
+.. code-block:: ini
+
+   ; platformio.ini
+   [env:teensy41]
+   platform = teensy
+   board = teensy41
+   framework = arduino
+   lib_deps =
+       FlexCAN_T4
+       Adafruit MCP4728
+
+Arduino IDE Setup
+-----------------
+
+1. Install Teensyduino add-on
+2. Select Board: "Teensy 4.1"
+3. Install FlexCAN_T4 library
 
 Flashing Firmware
 -----------------
 
 .. code-block:: bash
 
-   # Install Teensy Loader
-   sudo apt install teensy-loader-cli
+   # Using PlatformIO
+   pio run -t upload
 
-   # Compile and flash
-   cd firmware/teensy_can_master
-   make
-   teensy_loader_cli --mcu=TEENSY41 -w main.hex
+   # Using Teensy Loader
+   teensy_loader_cli --mcu=TEENSY41 -w firmware.hex
 
 Power Requirements
 ==================
@@ -223,9 +356,11 @@ Power Requirements
 +==================+===============+===============+
 | Main Computer    | 12V / 19V     | 5-15 A        |
 +------------------+---------------+---------------+
-| Teensy 4.1       | 5V (USB)      | 100 mA        |
+| Teensy 4.1 (×4)  | 5V (USB)      | 100 mA each   |
 +------------------+---------------+---------------+
-| CAN Transceiver  | 5V            | 50 mA         |
+| Waveshare CAN    | 5V            | 50 mA each    |
++------------------+---------------+---------------+
+| MCP4728 DAC      | 3.3V / 5V     | 10 mA         |
 +------------------+---------------+---------------+
 
 See :doc:`power-system` for complete power distribution details.

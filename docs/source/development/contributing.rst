@@ -2,7 +2,7 @@
 Contributing
 ============
 
-Guidelines for contributing to the UTM Navigator project.
+Guidelines for contributing to the AV2 project.
 
 .. contents:: Contents
    :local:

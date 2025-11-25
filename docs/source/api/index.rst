@@ -2,7 +2,7 @@
 API Reference
 =============
 
-Complete API documentation for the UTM Navigator.
+Complete API documentation for the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Complete API documentation for the UTM Navigator.
 Overview
 ========
 
-This section provides detailed API documentation for all public classes and functions in the UTM Navigator.
+This section provides detailed API documentation for all public classes and functions in the AV2.
 
 Core Modules
 ============

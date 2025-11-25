@@ -1,6 +1,6 @@
 # Configuration file for the Sphinx documentation builder.
 #
-# UTM Navigator - Autonomous Vehicle Platform
+# AV2 - Autonomous Vehicle Platform
 # Autonomous Vehicle Laboratory, Cal Poly Pomona
 #
 
@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'UTM Navigator'
+project = 'AV2'
 copyright = '2024, Autonomous Vehicle Laboratory, Cal Poly Pomona'
 author = 'Autonomous Vehicle Laboratory'
 
@@ -123,21 +123,21 @@ latex_elements = {
 }
 
 latex_documents = [
-    (master_doc, 'UTMNavigator.tex', 'UTM Navigator Documentation',
+    (master_doc, 'AV2.tex', 'AV2 Documentation',
      'Autonomous Vehicle Laboratory', 'manual'),
 ]
 
 # -- Options for manual page output ------------------------------------------
 
 man_pages = [
-    (master_doc, 'utmnavigator', 'UTM Navigator Documentation',
+    (master_doc, 'av2', 'AV2 Documentation',
      [author], 1)
 ]
 
 # -- Options for Texinfo output ----------------------------------------------
 
 texinfo_documents = [
-    (master_doc, 'UTMNavigator', 'UTM Navigator Documentation',
-     author, 'UTMNavigator', 'Autonomous Vehicle Research Platform',
+    (master_doc, 'AV2', 'AV2 Documentation',
+     author, 'AV2', 'Autonomous Vehicle Research Platform',
      'Miscellaneous'),
 ]

@@ -2,7 +2,7 @@
 Planning
 ========
 
-Path planning systems for the UTM Navigator.
+Path planning systems for the AV2.
 
 .. contents:: Contents
    :local:

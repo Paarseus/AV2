@@ -1,8 +1,8 @@
-.. UTM Navigator documentation master file
+.. AV2 documentation master file
 
-==========================================
-UTM Navigator - Autonomous Vehicle Platform
-==========================================
+=====================================
+AV2 - Autonomous Vehicle Platform
+=====================================
 
 .. image:: _static/cpp_logo.png
    :alt: Cal Poly Pomona Logo
@@ -11,31 +11,33 @@ UTM Navigator - Autonomous Vehicle Platform
 
 |
 
-Welcome to the official documentation for the **UTM Navigator**, an autonomous vehicle research platform developed at the **Autonomous Vehicle Laboratory** at **California State Polytechnic University, Pomona (Cal Poly Pomona)**.
+Welcome to the official documentation for **AV2**, an autonomous vehicle research platform developed at the **Autonomous Vehicle Laboratory** at **California State Polytechnic University, Pomona (Cal Poly Pomona)**.
 
-About the Vehicle
-=================
+About the Platform
+==================
 
-The UTM Navigator is a full-scale autonomous vehicle platform designed for research and development in self-driving technology. Built as a comprehensive research tool, this vehicle serves as a testbed for exploring cutting-edge algorithms in perception, planning, and control for autonomous navigation.
+AV2 is a full-scale autonomous vehicle platform designed for research and development in self-driving technology. Built as a comprehensive research tool, this vehicle serves as a testbed for exploring cutting-edge algorithms in perception, planning, and control for autonomous navigation.
 
-The platform integrates multiple sensor modalities, advanced computing hardware, and custom actuation systems to enable fully autonomous operation in real-world environments. It provides students and researchers with hands-on experience in developing and testing autonomous vehicle systems.
+The platform implements a distributed drive-by-wire control system using multiple Teensy 4.1 microcontrollers communicating over a CAN bus network. This modular architecture enables independent development and testing of steering, throttle, and braking subsystems while maintaining real-time performance and fault isolation.
 
 Key Capabilities
 ----------------
 
 - **Autonomous Navigation**: GPS-guided waypoint following with centimeter-level RTK precision
+- **Distributed Control Architecture**: Multi-node CAN bus system for modular actuator control
 - **Obstacle Detection & Avoidance**: Real-time 3D LIDAR-based perception with Bayesian occupancy mapping
 - **Multi-Task Perception**: Deep learning-based detection of vehicles, pedestrians, lanes, and drivable areas
 - **Local Path Planning**: Dynamic Window Approach (DWA) for reactive obstacle avoidance
 - **Path Tracking Control**: Pure Pursuit steering controller with speed-adaptive lookahead
+- **Safety Systems**: Hardware watchdogs, emergency stop, and fail-safe behaviors
 
 About This Documentation
 ========================
 
-This documentation provides a complete technical reference for the UTM Navigator platform, covering all aspects of the vehicle's design and operation:
+This documentation provides a complete technical reference for the AV2 platform, covering all aspects of the vehicle's design and operation:
 
 **Hardware**
-   Complete specifications and setup guides for all sensors, computing systems, actuators, and electrical components. Includes wiring diagrams, communication protocols, and integration details.
+   Complete specifications and setup guides for all sensors, computing systems, actuators, CAN bus architecture, and electrical components. Includes wiring diagrams, communication protocols, and integration details.
 
 **Mechanical**
    Vehicle dimensions, physical specifications, sensor mounting positions, and coordinate system definitions. Reference material for understanding the vehicle's physical configuration.

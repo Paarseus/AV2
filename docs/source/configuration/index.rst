@@ -2,7 +2,7 @@
 Configuration
 =============
 
-Configuration and calibration guides for the UTM Navigator.
+Configuration and calibration guides for the AV2.
 
 .. contents:: In This Section
    :local:
@@ -11,7 +11,7 @@ Configuration and calibration guides for the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator uses configuration files and calibration data to customize behavior for different environments and vehicles.
+The AV2 uses configuration files and calibration data to customize behavior for different environments and vehicles.
 
 Configuration Files
 ===================

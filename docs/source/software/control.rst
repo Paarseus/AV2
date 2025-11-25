@@ -2,7 +2,7 @@
 Control
 =======
 
-Control systems for the UTM Navigator.
+Control systems for the AV2.
 
 .. contents:: Contents
    :local:

@@ -1,4 +1,4 @@
-# Documentation dependencies for UTM Navigator
+# Documentation dependencies for AV2
 # Install with: pip install -r requirements.txt
 
 sphinx>=5.0.0

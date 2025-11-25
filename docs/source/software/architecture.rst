@@ -2,7 +2,7 @@
 Architecture
 ============
 
-Detailed software architecture of the UTM Navigator.
+Detailed software architecture of the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Detailed software architecture of the UTM Navigator.
 System Overview
 ===============
 
-The UTM Navigator is built as a modular, single-process Python application with multiple threads for sensor acquisition and visualization.
+The AV2 is built as a modular, single-process Python application with multiple threads for sensor acquisition and visualization.
 
 Design Principles
 -----------------
@@ -293,7 +293,7 @@ The system uses Python's logging module:
    import logging
 
    logging.basicConfig(level=logging.INFO)
-   logger = logging.getLogger('utm_navigator')
+   logger = logging.getLogger('av2')
 
    logger.info("Starting autonomous navigation")
    logger.warning("RTK fix lost, using standard GPS")

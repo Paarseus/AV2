@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Version history for the UTM Navigator.
+Version history for the AV2.
 
 Version 1.0.0 (2024)
 ====================

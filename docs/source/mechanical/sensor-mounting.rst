@@ -2,7 +2,7 @@
 Sensor Mounting
 ===============
 
-Sensor mounting positions and alignment for the UTM Navigator.
+Sensor mounting positions and alignment for the AV2.
 
 .. contents:: Contents
    :local:

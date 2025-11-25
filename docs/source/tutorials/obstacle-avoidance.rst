@@ -2,7 +2,7 @@
 Obstacle Avoidance
 ==================
 
-Enable and configure obstacle avoidance for the UTM Navigator.
+Enable and configure obstacle avoidance for the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Enable and configure obstacle avoidance for the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator uses LIDAR-based obstacle detection with the Dynamic Window Approach (DWA) for local obstacle avoidance.
+The AV2 uses LIDAR-based obstacle detection with the Dynamic Window Approach (DWA) for local obstacle avoidance.
 
 Enabling Obstacle Avoidance
 ===========================

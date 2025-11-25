@@ -2,7 +2,7 @@
 Sensors
 =======
 
-Software interfaces for UTM Navigator sensors.
+Software interfaces for AV2 sensors.
 
 .. contents:: Contents
    :local:

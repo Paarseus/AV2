@@ -2,7 +2,7 @@
 Coordinate Systems
 ==================
 
-Coordinate frame definitions for the UTM Navigator.
+Coordinate frame definitions for the AV2.
 
 .. contents:: Contents
    :local:
@@ -11,7 +11,7 @@ Coordinate frame definitions for the UTM Navigator.
 Overview
 ========
 
-The UTM Navigator uses several coordinate systems. Understanding these frames and their transformations is essential for correct operation.
+The AV2 uses several coordinate systems. Understanding these frames and their transformations is essential for correct operation.
 
 Frame Summary
 =============

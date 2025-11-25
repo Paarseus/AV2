@@ -2,7 +2,7 @@
 Theory & Background
 ==================
 
-Theoretical background for algorithms used in the UTM Navigator.
+Theoretical background for algorithms used in the AV2.
 
 .. contents:: Topics
    :local:
@@ -11,7 +11,7 @@ Theoretical background for algorithms used in the UTM Navigator.
 Overview
 ========
 
-This section provides theoretical foundations for the algorithms and techniques used in the UTM Navigator. Understanding these concepts helps with tuning, debugging, and extending the system.
+This section provides theoretical foundations for the algorithms and techniques used in the AV2. Understanding these concepts helps with tuning, debugging, and extending the system.
 
 Contents
 ========

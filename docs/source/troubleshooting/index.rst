@@ -2,7 +2,7 @@
 Troubleshooting
 ===============
 
-Common issues and solutions for the UTM Navigator.
+Common issues and solutions for the AV2.
 
 .. contents:: Contents
    :local:
