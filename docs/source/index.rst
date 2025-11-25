@@ -59,43 +59,24 @@ Documentation Contents
    :caption: Getting Started
 
    getting-started/index
-   getting-started/quick-start
-   getting-started/installation
-   getting-started/dependencies
-   getting-started/first-run
 
 .. toctree::
    :maxdepth: 2
    :caption: Hardware
 
    hardware/index
-   hardware/sensors
-   hardware/computing
-   hardware/actuators
-   hardware/firmware
-   hardware/wiring
-   hardware/power-system
 
 .. toctree::
    :maxdepth: 2
    :caption: Mechanical
 
    mechanical/index
-   mechanical/vehicle-specifications
-   mechanical/sensor-mounting
-   mechanical/coordinate-systems
 
 .. toctree::
    :maxdepth: 2
    :caption: Software
 
    software/index
-   software/architecture
-   software/perception
-   software/planning
-   software/control
-   software/sensors
-   software/visualization
 
 .. toctree::
    :maxdepth: 2
@@ -108,45 +89,30 @@ Documentation Contents
    :caption: Configuration
 
    configuration/index
-   configuration/dwa-config
-   configuration/sensor-calibration
-   configuration/vehicle-parameters
 
 .. toctree::
    :maxdepth: 2
    :caption: Tutorials
 
    tutorials/index
-   tutorials/basic-navigation
-   tutorials/obstacle-avoidance
-   tutorials/custom-routes
-   tutorials/tuning-controllers
 
 .. toctree::
    :maxdepth: 2
    :caption: Theory & Background
 
    theory/index
-   theory/pure-pursuit
-   theory/dwa
-   theory/occupancy-grids
-   theory/coordinate-transforms
 
 .. toctree::
    :maxdepth: 2
    :caption: Troubleshooting
 
    troubleshooting/index
-   troubleshooting/common-issues
-   troubleshooting/sensor-debugging
 
 .. toctree::
    :maxdepth: 2
    :caption: Development
 
    development/index
-   development/contributing
-   development/code-style
 
 .. toctree::
    :maxdepth: 1
